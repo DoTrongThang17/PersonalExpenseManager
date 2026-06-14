@@ -31,3 +31,29 @@ Hệ thống cung cấp các API CRUD tập trung, kết nối trực tiếp t�
 - **Quản lý mã nguồn:** GitHub
 
 ---
+---
+
+## 3. Phân công công việc nhóm
+
+| Thành viên | Đối tượng phụ trách | Chức năng |
+|------------|---------------------|-----------|
+| Nguyễn Thế Tuấn | Student | CRUD Sinh viên |
+| Đỗ Trọng Thắng | DanhMuc + NganSach | CRUD Danh mục chi tiêu + Ngân sách |
+| Nguyễn Anh Tuấn | Topics | CRUD Chủ đề |
+
+---
+
+## 4. Cơ sở dữ liệu
+
+File SQL: `server/src/database/QuanLyChiTieuCaNhan.sql`
+
+Gồm 4 bảng chính:
+
+| Bảng | Mô tả |
+|------|-------|
+| NguoiDung | Lưu thông tin người dùng |
+| DanhMuc | Danh mục thu/chi (hệ thống + cá nhân) |
+| GiaoDich | Các giao dịch thu chi |
+| NganSach | Ngân sách giới hạn theo tháng/năm |
+
+---
