@@ -1,50 +1,120 @@
-import logo from './logo.svg';
+import { useState, useEffect } from 'react';
 import './App.css';
-import { useEffect, useState } from "react";
+
 function App() {
-  const [count, setCount] = useState(0);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // --- Banner / Carousel state ---
+  const bannerImages = [
+    'https://picsum.photos/id/1015/1200/400',
+    'https://picsum.photos/id/1016/1200/400',
+    'https://picsum.photos/id/1018/1200/400',
+    'https://picsum.photos/id/1020/1200/400',
+  ];
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev === 0 ? bannerImages.length - 1 : prev - 1));
+  };
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev === bannerImages.length - 1 ? 0 : prev + 1));
+  };
+
+  // Tự động chuyển ảnh sau mỗi 4 giây
   useEffect(() => {
-    setTimeout(() => {
-      setCount((count) => count + 1);
-    }, 1000);
-  });
-  const [data, setData] = useState();
+    const timer = setInterval(nextSlide, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const mockResponse = [
+          { id: 1, name: 'John Doe', status: 'Active' },
+          { id: 2, name: 'Jane Smith', status: 'Inactive' },
+          { id: 3, name: 'Nguyen Van A', status: 'Active' },
+        ];
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        setUsers(mockResponse);
+      } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchData();
   }, []);
-  const fetchData = async () => {
-    try {
-      // Thực hiện yêu cầu GET bằng Fetch API
-      const response = await fetch('https://fuzzy-disco-x5rqw7q6x5w9c6gj6-5000.app.github.dev/data');
-      // Kiểm tra xem phản hồi có thành công không (mã trạng thái 200-299)
-      if (!response.ok) {
-        throw new Error('Phản hồi mạng không hợp lệ');
-      }
-      // Phân tích dữ liệu JSON từ phản hồi
-      const result = await response.json();
-      // Cập nhật trạng thái với dữ liệu đã lấy
-      setData(result);
-    } catch (error) {
-      console.error('Lỗi khi lấy dữ liệu:', error.message);
-    }
-  };
-  // Render component
-  if (!data) return <div>Loading...{count} seconds </div>; // Rendered first
-  //return <div>{data.name}</div>; // Rendered after fetch
+
   return (
     <div className="App">
-      <div className="table-title">Fetch Data Example : </div>
-      <div className ='table-header'>
-        <div>Name</div>
-        <div>ID</div>
-        <div>Status</div>
-      </div>
-      <div className ='table-row'>
-        <div>{data.name}</div>
-        <div>{data.id}</div>
-        <div>{data.active ? 'Active' : 'Inactive'}</div>
-      </div>
+      {/* HEADER */}
+      <header className="App-header-nav">
+        <h1>MY APP</h1>
+        <nav>
+          <a href="/">Home</a>
+          <a href="/link">Link</a>
+          <div className="dropdown">
+            <button>Options ▾</button>
+          </div>
+        </nav>
+      </header>
+
+      {/* BANNER / CAROUSEL */}
+      <section
+        className="Banner"
+        style={{ backgroundImage: `url(${bannerImages[currentSlide]})` }}
+      >
+        <button className="carousel-btn left" onClick={prevSlide}>
+          ‹
+        </button>
+        <button className="carousel-btn right" onClick={nextSlide}>
+          ›
+        </button>
+        <div className="carousel-dots">
+          {bannerImages.map((_, index) => (
+            <span
+              key={index}
+              className={`dot ${index === currentSlide ? 'active' : ''}`}
+              onClick={() => setCurrentSlide(index)}
+            ></span>
+          ))}
+        </div>
+      </section>
+
+      {/* CONTENT */}
+      <main className="Content">
+        {loading ? (
+          <p>Đang tải dữ liệu...</p>
+        ) : (
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>ID</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.name}</td>
+                  <td>{user.id}</td>
+                  <td>{user.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </main>
+
+      {/* FOOTER */}
+      <footer className="Footer">
+        <p>📍 Hanoi, August 2026</p>
+      </footer>
     </div>
   );
 }
+
 export default App;

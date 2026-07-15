@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
   Unique,
 } from 'typeorm';
+import { DanhMuc } from '../danh-muc/danh-muc.entity';
 
 @Entity('NganSach')
 @Unique('uq_nganSach_user_cat_period', ['nguoiDungId', 'danhMucId', 'thang', 'nam'])
@@ -20,6 +21,10 @@ export class NganSach {
 
   @Column({ name: 'danh_muc_id' })
   danhMucId: number;
+
+  @ManyToOne(() => DanhMuc, (dm) => dm.nganSachs, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'danh_muc_id' })
+  danhMuc: DanhMuc;
 
   @Column({ name: 'so_tien_gioi_han', type: 'decimal', precision: 15, scale: 2 })
   soTienGioiHan: number;

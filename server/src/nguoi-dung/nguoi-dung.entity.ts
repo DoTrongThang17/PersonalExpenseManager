@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { DanhMuc } from '../danh-muc/danh-muc.entity';
 
 @Entity('nguoi_dung')
 export class NguoiDung {
@@ -16,4 +17,7 @@ export class NguoiDung {
 
   @Column()
   so_dien_thoai: string;
+
+  @OneToMany(() => DanhMuc, (dm) => dm.nguoiDung)
+  danhMucs: DanhMuc[];
 }

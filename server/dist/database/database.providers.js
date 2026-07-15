@@ -35,29 +35,47 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.databaseProviders = void 0;
 const fs = __importStar(require("fs"));
-const student_entity_1 = require("../student/student.entity");
+const path = __importStar(require("path"));
+const dotenv = __importStar(require("dotenv"));
 const typeorm_1 = require("typeorm");
-const topics_entity_1 = require("../topics/topics.entity");
+const nguoi_dung_entity_1 = require("../nguoi-dung/nguoi-dung.entity");
+const danh_muc_entity_1 = require("../danh-muc/danh-muc.entity");
+const giao_dich_entity_1 = require("../giao-dich/giao-dich.entity");
+const ngan_sach_entity_1 = require("../ngan-sach/ngan-sach.entity");
+dotenv.config();
+const dbHost = process.env.DB_HOST || 'localhost';
+const dbPort = Number(process.env.DB_PORT || '3306');
+const dbUser = process.env.DB_USER || 'root';
+const dbPassword = process.env.DB_PASSWORD || '';
+const dbName = process.env.DB_NAME || 'quan_ly_chi_tieu';
+const sslConfig = process.env.DB_SSL === 'true'
+    ? {
+        ca: fs.readFileSync(path.join(process.cwd(), 'assets', 'ca.pem'), 'utf8'),
+    }
+    : undefined;
 exports.databaseProviders = [
     {
         provide: 'DATA_SOURCE',
         useFactory: async () => {
             const dataSource = new typeorm_1.DataSource({
                 type: 'mysql',
-                host: 'mysql-14737a33-nglthu-4e05.k.aivencloud.com',
-                port: 17237,
-                username: 'avnadmin',
-                password: 'AVNS_mftPAP8cG5l0Ih_cfL2',
-                database: 'STUDENTSREG',
-                entities: [student_entity_1.STUDENT, topics_entity_1.TOPICS],
+                host: dbHost,
+                port: dbPort,
+                username: dbUser,
+                password: dbPassword,
+                database: dbName,
+                entities: [nguoi_dung_entity_1.NguoiDung, danh_muc_entity_1.DanhMuc, giao_dich_entity_1.GiaoDich, ngan_sach_entity_1.NganSach],
                 synchronize: true,
-                ssl: {
-                    ca: fs
-                        .readFileSync('/workspaces/nestNode/server/assets/ca.pem')
-                        .toString(),
-                },
+                ssl: sslConfig,
+                logging: true,
             });
-            return dataSource.initialize();
+            await dataSource.initialize();
+            console.log('===================================');
+            console.log('✅ Database connected successfully!');
+            console.log(`Host: ${dbHost}`);
+            console.log(`Database: ${dbName}`);
+            console.log('===================================');
+            return dataSource;
         },
     },
 ];

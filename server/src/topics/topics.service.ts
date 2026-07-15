@@ -6,7 +6,7 @@ import { TOPICS } from './topics.entity';
 export class TopicsService {
   constructor(
     @Inject('TOPICS_REPOSITORY')
-    private topicsRepository: Repository<TOPICS>
+    private topicsRepository: Repository<TOPICS>,
   ) {}
   async findAll(): Promise<TOPICS[]> {
     const tid = await this.topicsRepository.findBy({

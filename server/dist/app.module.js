@@ -10,13 +10,23 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
+const topics_module_1 = require("./topics/topics.module");
 const database_module_1 = require("./database/database.module");
+const nguoi_dung_module_1 = require("./nguoi-dung/nguoi-dung.module");
+const auth_module_1 = require("./auth/auth.module");
+const api_test_module_1 = require("./api-test/api-test.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [database_module_1.DatabaseModule],
+        imports: [
+            database_module_1.DatabaseModule,
+            nguoi_dung_module_1.NguoiDungModule,
+            topics_module_1.TopicsModule,
+            auth_module_1.AuthModule,
+            api_test_module_1.ApiTestModule,
+        ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
