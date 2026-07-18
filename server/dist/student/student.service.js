@@ -20,14 +20,37 @@ let StudentService = class StudentService {
     constructor(studentRepository) {
         this.studentRepository = studentRepository;
     }
-    async findAll() {
-        const sid = await this.studentRepository.findBy({
-            SID: '1000',
+    async create(dto) {
+        const existed = await this.studentRepository.findOne({
+            where: { SID: dto.SID },
         });
-        return sid;
+        if (existed) {
+            throw new common_1.ConflictException(`Mã sinh viên "${dto.SID}" đã tồn tại`);
+        }
+        const student = this.studentRepository.create(dto);
+        return this.studentRepository.save(student);
     }
-    getStudent() {
-        return 'Ke mac doi Hello World!';
+    async findAll() {
+        return this.studentRepository.find();
+    }
+    async findOne(sid) {
+        const student = await this.studentRepository.findOne({
+            where: { SID: sid },
+        });
+        if (!student) {
+            throw new common_1.NotFoundException(`Không tìm thấy sinh viên có mã "${sid}"`);
+        }
+        return student;
+    }
+    async update(sid, dto) {
+        const student = await this.findOne(sid);
+        Object.assign(student, dto);
+        return this.studentRepository.save(student);
+    }
+    async remove(sid) {
+        const student = await this.findOne(sid);
+        await this.studentRepository.remove(student);
+        return { message: `Đã xoá sinh viên có mã "${sid}"` };
     }
 };
 exports.StudentService = StudentService;

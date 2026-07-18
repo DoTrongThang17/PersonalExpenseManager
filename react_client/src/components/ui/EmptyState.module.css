@@ -1,0 +1,32 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 48px 24px;
+  gap: 6px;
+}
+
+.iconWrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--gold-soft);
+  color: var(--gold-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.title {
+  font-size: 16px;
+  font-family: var(--font-display);
+}
+
+.desc {
+  color: var(--ink-faint);
+  font-size: 13.5px;
+  max-width: 320px;
+  margin-bottom: 14px;
+}

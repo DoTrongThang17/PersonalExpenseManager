@@ -14,7 +14,7 @@ import { NguoiDungModule } from '../nguoi-dung/nguoi-dung.module';
       defaultStrategy: 'jwt',
     }),
     JwtModule.register({
-      secret: 'my-secret-key',
+      secret: process.env.JWT_SECRET ?? 'dev-jwt-secret',
       signOptions: {
         expiresIn: '1h',
       },
@@ -22,14 +22,7 @@ import { NguoiDungModule } from '../nguoi-dung/nguoi-dung.module';
     NguoiDungModule,
   ],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    JwtStrategy,
-    JwtAuthGuard,
-  ],
-  exports: [
-    AuthService,
-    JwtAuthGuard,
-  ],
+  providers: [AuthService, JwtStrategy, JwtAuthGuard],
+  exports: [AuthService, JwtAuthGuard],
 })
 export class AuthModule {}

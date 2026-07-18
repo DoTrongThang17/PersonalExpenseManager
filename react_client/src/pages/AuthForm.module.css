@@ -1,0 +1,30 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.formError {
+  background: var(--berry-soft);
+  color: var(--berry);
+  font-size: 13px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  line-height: 1.5;
+}
+
+.switchLine {
+  margin-top: 22px;
+  font-size: 13.5px;
+  color: var(--ink-faint);
+  text-align: center;
+}
+
+.switchLine a {
+  color: var(--gold-strong);
+  font-weight: 600;
+  text-decoration: none;
+}
+.switchLine a:hover {
+  text-decoration: underline;
+}

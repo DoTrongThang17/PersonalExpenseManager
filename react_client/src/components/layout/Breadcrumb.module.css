@@ -1,0 +1,27 @@
+.crumb {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  padding: 16px 24px 0;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sep {
+  color: var(--ink-faint);
+}
+
+.parent {
+  color: var(--ink-faint);
+  font-weight: 500;
+}
+
+.current {
+  color: var(--ink);
+  font-weight: 700;
+}

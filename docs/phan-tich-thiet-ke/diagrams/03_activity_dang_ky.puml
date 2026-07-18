@@ -1,0 +1,30 @@
+@startuml 03_activity_dang_ky
+!include style.iuml
+title Sơ đồ hoạt động — Đăng ký tài khoản
+
+start
+:Người dùng nhập\nhọ tên, email, mật khẩu,\nsố điện thoại;
+:Frontend gửi POST /nguoi-dung;
+:ValidationPipe kiểm tra định dạng\n(email hợp lệ, mật khẩu ≥ 6 ký tự...);
+
+if (Dữ liệu hợp lệ?) then (không)
+  :Trả lỗi 400 Bad Request\n(liệt kê field sai);
+  stop
+else (có)
+endif
+
+:Chuẩn hoá email (viết thường, cắt khoảng trắng);
+:Truy vấn DB tìm email đã tồn tại chưa;
+
+if (Email đã tồn tại?) then (có)
+  :Trả lỗi 400\n"Email đã tồn tại";
+  stop
+else (chưa)
+endif
+
+:Băm mật khẩu bằng bcrypt;
+:Lưu người dùng mới vào DB;
+:Trả về thông tin người dùng\n(không kèm mật khẩu);
+stop
+
+@enduml

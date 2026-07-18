@@ -1,4 +1,6 @@
+import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 
@@ -14,11 +16,23 @@ async function bootstrap() {
     credentials: true,
   });
 
+  // Bật validate toàn cục: mọi DTO có decorator class-validator sẽ được
+  // kiểm tra tự động, request sai định dạng bị chặn với lỗi 400 rõ ràng
+  // trước khi chạm tới service/DB.
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true, // loại bỏ field lạ không khai báo trong DTO
+      forbidNonWhitelisted: true, // báo lỗi nếu client gửi field lạ
+      transform: true, // tự convert kiểu dữ liệu (vd: query string -> number)
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  );
+
   app.use(cookieParser());
 
   app.use(
     session({
-      secret: 'my-secret-key',
+      secret: process.env.SESSION_SECRET ?? 'dev-session-secret',
       resave: false,
       saveUninitialized: false,
       cookie: {

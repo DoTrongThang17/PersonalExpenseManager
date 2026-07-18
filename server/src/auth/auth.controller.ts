@@ -1,19 +1,9 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  UseGuards,
-  Request,
-} from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
-
-class LoginDto {
-  email: string;
-  mat_khau: string;
-}
+import { LoginDto } from './login.dto';
+import { CurrentUser, type CurrentUserPayload } from './current-user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -26,10 +16,10 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  profile(@Request() req) {
+  profile(@CurrentUser() user: CurrentUserPayload) {
     return {
       message: 'Bạn đã đăng nhập thành công',
-      user: req.user,
+      user,
     };
   }
 }

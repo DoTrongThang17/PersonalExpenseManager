@@ -1,9 +1,14 @@
 import { Repository } from 'typeorm';
 import { TOPICS } from './topics.entity';
+import { CreateTopicDto, UpdateTopicDto } from './topics.dto';
 export declare class TopicsService {
-    private topicsRepository;
+    private readonly topicsRepository;
     constructor(topicsRepository: Repository<TOPICS>);
+    create(dto: CreateTopicDto): Promise<TOPICS>;
     findAll(): Promise<TOPICS[]>;
-    getTopics(): Promise<TOPICS[]>;
-    getStudent(): string;
+    findOne(tid: number): Promise<TOPICS>;
+    update(tid: number, dto: UpdateTopicDto): Promise<TOPICS>;
+    remove(tid: number): Promise<{
+        message: string;
+    }>;
 }

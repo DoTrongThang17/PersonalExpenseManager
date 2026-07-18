@@ -1,21 +1,44 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { StudentService } from './student.service';
+import { CreateStudentDto, UpdateStudentDto } from './student.dto';
 
-@Controller()
+@Controller('student')
 export class StudentController {
   constructor(private readonly studentService: StudentService) {}
 
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  create(@Body() dto: CreateStudentDto) {
+    return this.studentService.create(dto);
+  }
+
   @Get()
-  getHello() {
-    //return this.studentService.getStudent();
+  findAll() {
     return this.studentService.findAll();
   }
-  @Get('/data')
-  getData() {
-    return {
-      id: 1,
-      name: 'John Doe',
-      active: true,
-    };
+
+  @Get(':sid')
+  findOne(@Param('sid') sid: string) {
+    return this.studentService.findOne(sid);
+  }
+
+  @Put(':sid')
+  update(@Param('sid') sid: string, @Body() dto: UpdateStudentDto) {
+    return this.studentService.update(sid, dto);
+  }
+
+  @Delete(':sid')
+  remove(@Param('sid') sid: string) {
+    return this.studentService.remove(sid);
   }
 }

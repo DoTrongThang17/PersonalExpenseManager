@@ -9,5 +9,4 @@ export class STUDENT {
   EMAIL: string;
   @Column({ length: 10 })
   Tutor_id: string;
-
 }

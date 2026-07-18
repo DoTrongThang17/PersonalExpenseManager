@@ -40,7 +40,10 @@ export class DanhMucService {
   // ── READ ONE ─────────────────────────────────────────────────
   async findOne(id: number, nguoiDungId: number): Promise<DanhMuc> {
     const danhMuc = await this.danhMucRepo.findOne({
-      where: [{ id, nguoiDungId: IsNull() }, { id, nguoiDungId }],
+      where: [
+        { id, nguoiDungId: IsNull() },
+        { id, nguoiDungId },
+      ],
     });
     if (!danhMuc) {
       throw new NotFoundException(`Không tìm thấy danh mục id=${id}`);
@@ -64,9 +67,14 @@ export class DanhMucService {
     }
     if (dto.tenDanhMuc && dto.tenDanhMuc !== danhMuc.tenDanhMuc) {
       const dup = await this.danhMucRepo.findOne({
-        where: { nguoiDungId, tenDanhMuc: dto.tenDanhMuc, loai: dto.loai ?? danhMuc.loai },
+        where: {
+          nguoiDungId,
+          tenDanhMuc: dto.tenDanhMuc,
+          loai: dto.loai ?? danhMuc.loai,
+        },
       });
-      if (dup) throw new BadRequestException(`Tên "${dto.tenDanhMuc}" đã tồn tại`);
+      if (dup)
+        throw new BadRequestException(`Tên "${dto.tenDanhMuc}" đã tồn tại`);
     }
     Object.assign(danhMuc, dto);
     return this.danhMucRepo.save(danhMuc);

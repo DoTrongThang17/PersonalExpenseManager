@@ -1,0 +1,132 @@
+.wrap {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(320px, 42%) 1fr;
+}
+
+.brandPanel {
+  background: var(--ink);
+  color: #fff;
+  padding: 56px 48px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  /* Hoạ tiết đường kẻ sổ — như từng dòng trong cuốn sổ ghi chép */
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 47px,
+    rgba(255, 255, 255, 0.055) 48px
+  );
+}
+
+.brandMark {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  background: var(--gold);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+
+.brandTitle {
+  font-size: 34px;
+  margin-bottom: 10px;
+}
+
+.brandTag {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 15px;
+  max-width: 320px;
+  line-height: 1.6;
+  margin-bottom: 48px;
+}
+
+.ledgerLines {
+  margin: auto 0 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ledgerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 14px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  font-size: 13px;
+}
+
+.ledgerRow dt {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.ledgerRow dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+  font-family: var(--font-display);
+  font-size: 13.5px;
+}
+
+.thu {
+  color: #8fc9a8;
+}
+.chi {
+  color: #e3a2ae;
+}
+
+.formPanel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  background: var(--paper);
+}
+
+.formCard {
+  width: 100%;
+  max-width: 380px;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-strong);
+  margin-bottom: 10px;
+}
+
+.title {
+  font-size: 27px;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: var(--ink-faint);
+  font-size: 14px;
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+
+@media (max-width: 860px) {
+  .wrap {
+    grid-template-columns: 1fr;
+  }
+  .brandPanel {
+    padding: 36px 28px;
+  }
+  .brandTag {
+    margin-bottom: 28px;
+  }
+  .ledgerLines {
+    margin-top: 0;
+  }
+}

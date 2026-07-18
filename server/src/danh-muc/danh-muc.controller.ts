@@ -9,42 +9,58 @@ import {
   ParseIntPipe,
   HttpCode,
   HttpStatus,
-  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { DanhMucService } from './danh-muc.service';
 import { CreateDanhMucDto, UpdateDanhMucDto } from './danh-muc.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import {
+  CurrentUser,
+  type CurrentUserPayload,
+} from '../auth/current-user.decorator';
 
+@UseGuards(JwtAuthGuard)
 @Controller('danh-muc')
 export class DanhMucController {
   constructor(private readonly danhMucService: DanhMucService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() dto: CreateDanhMucDto) {
-    return this.danhMucService.create(1, dto);
+  create(
+    @CurrentUser() user: CurrentUserPayload,
+    @Body() dto: CreateDanhMucDto,
+  ) {
+    return this.danhMucService.create(user.userId, dto);
   }
 
   @Get()
-  findAll() {
-    return this.danhMucService.findAll(1);
+  findAll(@CurrentUser() user: CurrentUserPayload) {
+    return this.danhMucService.findAll(user.userId);
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.danhMucService.findOne(id, 1);
+  findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return this.danhMucService.findOne(id, user.userId);
   }
 
   @Put(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: CurrentUserPayload,
     @Body() dto: UpdateDanhMucDto,
   ) {
-    return this.danhMucService.update(id, 1, dto);
+    return this.danhMucService.update(id, user.userId, dto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.danhMucService.remove(id, 1);
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return this.danhMucService.remove(id, user.userId);
   }
 }

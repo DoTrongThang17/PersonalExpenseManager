@@ -1,0 +1,36 @@
+.tooltip {
+  background: var(--ink);
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  box-shadow: var(--shadow-md);
+}
+
+.tooltipLabel {
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-family: var(--font-display);
+}
+
+.tooltipRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.dotThu,
+.dotChi {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dotThu {
+  background: #6fae86;
+}
+.dotChi {
+  background: #c97183;
+}

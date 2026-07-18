@@ -7,6 +7,8 @@ import { NguoiDung } from '../nguoi-dung/nguoi-dung.entity';
 import { DanhMuc } from '../danh-muc/danh-muc.entity';
 import { GiaoDich } from '../giao-dich/giao-dich.entity';
 import { NganSach } from '../ngan-sach/ngan-sach.entity';
+import { TOPICS } from '../topics/topics.entity';
+import { STUDENT } from '../student/student.entity';
 
 dotenv.config();
 
@@ -37,7 +39,7 @@ export const databaseProviders = [
         username: dbUser,
         password: dbPassword,
         database: dbName,
-        entities: [NguoiDung, DanhMuc, GiaoDich, NganSach],
+        entities: [NguoiDung, DanhMuc, GiaoDich, NganSach, TOPICS, STUDENT],
         synchronize: true,
         ssl: sslConfig,
         logging: true,

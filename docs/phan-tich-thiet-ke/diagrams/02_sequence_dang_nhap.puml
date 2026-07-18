@@ -1,0 +1,36 @@
+@startuml 02_sequence_dang_nhap
+!include style.iuml
+title Sơ đồ tuần tự — Đăng nhập
+
+actor "Người dùng" as User
+participant "AuthController" as Ctrl
+participant "AuthService" as Svc
+participant "NguoiDungService" as UserSvc
+database "MySQL" as DB
+participant "JwtService" as Jwt
+
+User -> Ctrl: POST /auth/login\n{email, mat_khau}
+Ctrl -> Svc: validateUser(email, mat_khau)
+Svc -> UserSvc: findByEmail(email)
+UserSvc -> DB: SELECT * FROM nguoi_dung\nWHERE email = ?
+DB --> UserSvc: NguoiDung | null
+
+alt không tìm thấy email
+  UserSvc --> Svc: null
+  Svc --> Ctrl: throw UnauthorizedException
+  Ctrl --> User: 401 "Email hoặc mật khẩu không đúng"
+else tìm thấy email
+  UserSvc --> Svc: NguoiDung (có mat_khau đã băm)
+  Svc -> Svc: bcrypt.compare(mat_khau, user.mat_khau)
+  alt sai mật khẩu
+    Svc --> Ctrl: throw UnauthorizedException
+    Ctrl --> User: 401 "Email hoặc mật khẩu không đúng"
+  else đúng mật khẩu
+    Svc -> Jwt: sign({sub: user.id, email})
+    Jwt --> Svc: access_token
+    Svc --> Ctrl: {access_token, user}
+    Ctrl --> User: 200 {access_token, user}
+  end
+end
+
+@enduml

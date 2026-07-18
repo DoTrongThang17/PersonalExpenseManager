@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { NguoiDung } from '../nguoi-dung/nguoi-dung.entity';
 import { DanhMuc } from '../danh-muc/danh-muc.entity';
+import { LoaiDanhMuc } from '../danh-muc/loai-danh-muc.enum';
 
 @Entity('GiaoDich')
 export class GiaoDich {
@@ -32,14 +33,16 @@ export class GiaoDich {
   @Column({ type: 'decimal', precision: 15, scale: 2, name: 'so_tien' })
   soTien: number;
 
-  @Column({ type: 'enum', enum: ['thu', 'chi'] })
-  loai: 'thu' | 'chi';
+  @Column({ type: 'enum', enum: LoaiDanhMuc })
+  loai: LoaiDanhMuc;
 
   @Column({ type: 'text', nullable: true })
   moTa: string;
 
+  // Lưu ý: cột kiểu 'date' - TypeORM/mysql2 trả về dạng chuỗi 'YYYY-MM-DD'
+  // (không phải object Date đầy đủ giờ/phút/giây), nên khai báo string cho khớp.
   @Column({ type: 'date', name: 'ngay_giao_dich' })
-  ngayGiaoDich: Date;
+  ngayGiaoDich: string;
 
   @Column({ name: 'hinh_anh_hoa_don', length: 500, nullable: true })
   hinhAnhHoaDon: string;

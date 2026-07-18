@@ -1,0 +1,94 @@
+@startuml class_diagram
+!include style.iuml
+skinparam classAttributeIconSize 0
+skinparam classFontSize 14
+skinparam classFontStyle bold
+skinparam classAttributeFontSize 12
+skinparam classAttributeFontStyle normal
+skinparam class {
+    BackgroundColor #FEFCF8
+    BorderColor #AD7F24
+    ArrowColor #16233D
+    FontColor #16233D
+}
+
+title Sơ đồ lớp (Class Diagram) — Hệ thống Quản lý Chi tiêu Cá nhân
+
+class NguoiDung {
+  + id: number
+  + ho_ten: string
+  + email: string
+  - mat_khau: string
+  + so_dien_thoai: string
+  --
+  + create(dto): NguoiDung
+  + findAll(): NguoiDung[]
+  + findOne(id, requestingUserId): NguoiDung
+  + update(id, requestingUserId, dto): NguoiDung
+  + remove(id, requestingUserId): void
+}
+
+class DanhMuc {
+  + id: number
+  + nguoiDungId: number | null
+  + tenDanhMuc: string
+  + moTa: string
+  + loai: LoaiEnum
+  + mauSac: string
+  + bieuTuong: string
+  --
+  + create(nguoiDungId, dto): DanhMuc
+  + findAll(nguoiDungId): DanhMuc[]
+  + findOne(id, nguoiDungId): DanhMuc
+  + update(id, nguoiDungId, dto): DanhMuc
+  + remove(id, nguoiDungId): void
+}
+
+class GiaoDich {
+  + id: number
+  + nguoiDungId: number
+  + danhMucId: number
+  + soTien: decimal
+  + loai: LoaiEnum
+  + moTa: string
+  + ngayGiaoDich: date
+  + hinhAnhHoaDon: string
+  --
+  + create(nguoiDungId, dto): GiaoDich
+  + findAll(nguoiDungId, filter): GiaoDich[]
+  + findOne(id, nguoiDungId): GiaoDich
+  + update(id, nguoiDungId, dto): GiaoDich
+  + remove(id, nguoiDungId): void
+  + tongHopTheoThang(nguoiDungId, thang, nam): ThongKe
+}
+
+class NganSach {
+  + id: number
+  + nguoiDungId: number
+  + danhMucId: number
+  + soTienGioiHan: decimal
+  + thang: number
+  + nam: number
+  + ghiChu: string
+  --
+  + create(nguoiDungId, dto): NganSach
+  + findAll(nguoiDungId, thang, nam): NganSach[]
+  + findOne(id, nguoiDungId): NganSach
+  + update(id, nguoiDungId, dto): NganSach
+  + remove(id, nguoiDungId): void
+}
+
+enum LoaiEnum {
+  THU
+  CHI
+}
+
+NguoiDung "1" -- "0..*" DanhMuc : sở hữu >
+NguoiDung "1" -- "0..*" GiaoDich : thực hiện >
+NguoiDung "1" -- "0..*" NganSach : đặt ra >
+DanhMuc "1" -- "0..*" GiaoDich : phân loại >
+DanhMuc "1" -- "0..*" NganSach : áp dụng cho >
+DanhMuc ..> LoaiEnum
+GiaoDich ..> LoaiEnum
+
+@enduml

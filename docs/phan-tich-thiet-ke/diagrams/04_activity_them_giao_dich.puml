@@ -1,0 +1,40 @@
+@startuml 04_activity_them_giao_dich
+!include style.iuml
+title Sơ đồ hoạt động — Thêm giao dịch thu/chi
+
+start
+:Người dùng chọn danh mục,\nnhập số tiền, loại (thu/chi),\nngày giao dịch;
+:Frontend gửi POST /giao-dich\n(kèm JWT token);
+
+:JwtAuthGuard xác thực token;
+if (Token hợp lệ?) then (không)
+  :Trả lỗi 401 Unauthorized;
+  stop
+else (có)
+endif
+
+:ValidationPipe kiểm tra định dạng DTO;
+if (Dữ liệu hợp lệ?) then (không)
+  :Trả lỗi 400 Bad Request;
+  stop
+else (có)
+endif
+
+:Truy vấn danh mục theo danhMucId;
+if (Danh mục tồn tại và\n(thuộc về người dùng HOẶC dùng chung)?) then (không)
+  :Trả lỗi 404\n"Không tìm thấy danh mục"; 
+  stop
+else (có)
+endif
+
+if (Loại danh mục khớp\nloại giao dịch (thu/chi)?) then (không)
+  :Trả lỗi 400\n"Loại giao dịch không khớp danh mục";
+  stop
+else (có)
+endif
+
+:Lưu giao dịch vào DB\n(gắn nguoiDungId từ token);
+:Trả về giao dịch vừa tạo;
+stop
+
+@enduml

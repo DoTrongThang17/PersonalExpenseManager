@@ -3,6 +3,13 @@ import type { Request, Response } from 'express';
 
 import { AppService } from './app.service';
 
+// Khai báo kiểu cho dữ liệu lưu trong session (thay vì ép kiểu `any`)
+declare module 'express-session' {
+  interface SessionData {
+    username?: string;
+  }
+}
+
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -10,11 +17,6 @@ export class AppController {
   @Get()
   getHello(): string {
     return this.appService.getHello();
-  }
-
-  @Get('topics')
-  getTopics(): string {
-    return 'this is testing';
   }
 
   // =========================
@@ -35,7 +37,7 @@ export class AppController {
   // =========================
   @Get('session')
   setSession(@Req() req: Request, @Res() res: Response): void {
-    (req.session as any).username = 'thang';
+    req.session.username = 'thang';
 
     res.send('Session saved');
   }
@@ -43,7 +45,7 @@ export class AppController {
   @Get('session/get')
   getSession(@Req() req: Request) {
     return {
-      username: (req.session as any).username ?? null,
+      username: req.session.username ?? null,
     };
   }
 }

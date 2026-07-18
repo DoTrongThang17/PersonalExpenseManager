@@ -1,0 +1,34 @@
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontSize 13
+skinparam ArrowColor #16233D
+skinparam ArrowFontColor #4B566C
+skinparam ArrowFontSize 12
+
+skinparam activity {
+  BackgroundColor #FEFCF8
+  BorderColor #AD7F24
+  FontColor #16233D
+  DiamondBackgroundColor #F4E9D2
+  DiamondBorderColor #AD7F24
+  StartColor #16233D
+  EndColor #833141
+}
+
+skinparam sequence {
+  ActorBackgroundColor #FEFCF8
+  ActorBorderColor #AD7F24
+  ParticipantBackgroundColor #FEFCF8
+  ParticipantBorderColor #AD7F24
+  ParticipantFontColor #16233D
+  LifeLineBorderColor #C3CAD4
+  ArrowColor #16233D
+  DatabaseBackgroundColor #F4E9D2
+  DatabaseBorderColor #AD7F24
+}
+
+skinparam note {
+  BackgroundColor #F4E9D2
+  BorderColor #AD7F24
+}

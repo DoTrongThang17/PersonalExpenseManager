@@ -11,7 +11,12 @@ import {
 import { DanhMuc } from '../danh-muc/danh-muc.entity';
 
 @Entity('NganSach')
-@Unique('uq_nganSach_user_cat_period', ['nguoiDungId', 'danhMucId', 'thang', 'nam'])
+@Unique('uq_nganSach_user_cat_period', [
+  'nguoiDungId',
+  'danhMucId',
+  'thang',
+  'nam',
+])
 export class NganSach {
   @PrimaryGeneratedColumn()
   id: number;
@@ -26,7 +31,12 @@ export class NganSach {
   @JoinColumn({ name: 'danh_muc_id' })
   danhMuc: DanhMuc;
 
-  @Column({ name: 'so_tien_gioi_han', type: 'decimal', precision: 15, scale: 2 })
+  @Column({
+    name: 'so_tien_gioi_han',
+    type: 'decimal',
+    precision: 15,
+    scale: 2,
+  })
   soTienGioiHan: number;
 
   @Column({ type: 'tinyint' })

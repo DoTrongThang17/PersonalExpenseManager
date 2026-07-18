@@ -1,0 +1,174 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1180px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.header h1 {
+  font-size: 24px;
+}
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-strong);
+  margin: 0 0 4px;
+}
+
+.tabs {
+  display: inline-flex;
+  gap: 4px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+  width: fit-content;
+}
+
+.tab {
+  border: none;
+  background: transparent;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-faint);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.tab:hover {
+  color: var(--ink);
+}
+.tabActive {
+  background: var(--ink);
+  color: #fff;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.dmCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dmTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #fff;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.dmActions {
+  display: flex;
+  gap: 2px;
+}
+
+.iconBtn {
+  border: none;
+  background: transparent;
+  color: var(--ink-faint);
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+}
+.iconBtn:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.dmName {
+  font-weight: 600;
+  font-size: 14.5px;
+  color: var(--ink);
+}
+
+.dmLoai {
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 100px;
+}
+.dmLoai.thu {
+  background: var(--sage-soft);
+  color: var(--sage);
+}
+.dmLoai.chi {
+  background: var(--berry-soft);
+  color: var(--berry);
+}
+
+.dmDesc {
+  font-size: 12.5px;
+  color: var(--ink-faint);
+  line-height: 1.5;
+}
+
+/* ---------- Form trong modal ---------- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.colorRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.colorSwatchBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+.colorPicker {
+  width: 28px;
+  height: 28px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 50%;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+}
+
+.formError {
+  background: var(--berry-soft);
+  color: var(--berry);
+  font-size: 13px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  line-height: 1.5;
+}

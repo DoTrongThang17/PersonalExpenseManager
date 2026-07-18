@@ -5,6 +5,33 @@
 
 ---
 
+## Cách chạy dự án (Backend + Frontend)
+
+```bash
+# 1. Backend (NestJS) - chạy ở cổng 5000
+cd server
+npm install
+cp .env.example .env      # chỉnh thông tin DB thật (host/user/password/database)
+npm run start:dev
+
+# 2. Frontend (React) - chạy ở cổng 3000, mở terminal khác
+cd react_client
+npm install
+cp .env.example .env      # mặc định trỏ tới http://localhost:5000
+npm start
+```
+
+Mở http://localhost:3000, đăng ký tài khoản mới rồi dùng thử. Backend cần MySQL đang chạy và đúng thông tin trong `server/.env` (bảng sẽ tự tạo nhờ `synchronize: true`, không cần chạy tay file SQL).
+
+Kiểm tra backend độc lập:
+```bash
+cd server
+npm run build     # build production, phải ra "Compiled successfully"
+npm test          # 54 unit test, phải pass hết
+```
+
+---
+
 # 1. Thực trạng & Ý tưởng dự án
 
 Hiện nay nhiều người vẫn quản lý các khoản thu chi bằng sổ tay hoặc ghi chú trên điện thoại. Việc này dễ dẫn đến:
@@ -126,70 +153,80 @@ Mục tiêu của dự án là tạo ra một nền tảng hỗ trợ người d
 
 ## Authentication & Security
 
-- Đăng ký tài khoản.
-- Hash password bằng bcrypt.
-- Đăng nhập bằng email và mật khẩu.
-- Sinh JWT Token.
-- Kiểm tra quyền truy cập API.
-- Sử dụng Cookie và Session.
+- Đăng ký tài khoản, hash password bằng bcrypt.
+- Đăng nhập bằng email + mật khẩu, sinh JWT Token (hết hạn sau 1 giờ).
+- `JwtAuthGuard` bảo vệ toàn bộ API nghiệp vụ — mỗi người dùng chỉ thao tác được trên dữ liệu của chính mình (không dùng chung/xem được dữ liệu người khác).
+- `ValidationPipe` bật toàn cục — mọi dữ liệu gửi lên đều được kiểm tra định dạng (whitelist, forbidNonWhitelisted).
+
+| Method | Endpoint | Mô tả | Cần đăng nhập |
+|---|---|---|---|
+| POST | `/nguoi-dung` | Đăng ký tài khoản | Không |
+| POST | `/auth/login` | Đăng nhập, trả về `access_token` | Không |
+| GET | `/auth/profile` | Thông tin JWT hiện tại | Có |
+
+## CRUD Người dùng (`/nguoi-dung`)
+
+| Method | Endpoint | Mô tả |
+|---|---|---|
+| GET | `/nguoi-dung` | Danh sách người dùng |
+| GET | `/nguoi-dung/:id` | Xem hồ sơ (chỉ chủ tài khoản) |
+| PUT | `/nguoi-dung/:id` | Cập nhật hồ sơ (chỉ chủ tài khoản) |
+| DELETE | `/nguoi-dung/:id` | Xoá tài khoản (chỉ chủ tài khoản) |
+
+## CRUD Danh mục (`/danh-muc`)
+
+| Method | Endpoint | Mô tả |
+|---|---|---|
+| POST | `/danh-muc` | Tạo danh mục thu/chi |
+| GET | `/danh-muc` | Danh sách danh mục của người dùng + danh mục dùng chung |
+| GET | `/danh-muc/:id` | Chi tiết 1 danh mục |
+| PUT | `/danh-muc/:id` | Cập nhật |
+| DELETE | `/danh-muc/:id` | Xoá |
+
+## CRUD Giao dịch (`/giao-dich`)
+
+| Method | Endpoint | Mô tả |
+|---|---|---|
+| POST | `/giao-dich` | Ghi nhận giao dịch thu/chi (kiểm tra danh mục đúng chủ + đúng loại) |
+| GET | `/giao-dich?thang=&nam=&loai=&danhMucId=` | Danh sách giao dịch, lọc theo tháng/năm/loại/danh mục |
+| GET | `/giao-dich/tong-hop?thang=&nam=` | Tổng thu, tổng chi, chênh lệch trong tháng |
+| GET | `/giao-dich/:id` | Chi tiết 1 giao dịch |
+| PUT | `/giao-dich/:id` | Cập nhật |
+| DELETE | `/giao-dich/:id` | Xoá |
+
+## CRUD Ngân sách (`/ngan-sach`)
+
+| Method | Endpoint | Mô tả |
+|---|---|---|
+| POST | `/ngan-sach` | Đặt hạn mức chi tiêu theo danh mục + tháng/năm |
+| GET | `/ngan-sach?thang=&nam=` | Danh sách ngân sách |
+| GET | `/ngan-sach/:id` | Chi tiết |
+| PUT | `/ngan-sach/:id` | Cập nhật |
+| DELETE | `/ngan-sach/:id` | Xoá |
+
+## CRUD Sinh viên (`/student`) — phụ trách: Nguyễn Thế Tuấn
+
+| Method | Endpoint | Mô tả |
+|---|---|---|
+| POST | `/student` | Thêm sinh viên |
+| GET | `/student` | Danh sách sinh viên |
+| GET | `/student/:sid` | Chi tiết theo mã sinh viên |
+| PUT | `/student/:sid` | Cập nhật |
+| DELETE | `/student/:sid` | Xoá |
+
+## CRUD Chủ đề (`/topics`) — phụ trách: Nguyễn Anh Tuấn
+
+| Method | Endpoint | Mô tả |
+|---|---|---|
+| POST | `/topics` | Thêm chủ đề |
+| GET | `/topics` | Danh sách chủ đề |
+| GET | `/topics/:tid` | Chi tiết theo mã chủ đề |
+| PUT | `/topics/:tid` | Cập nhật |
+| DELETE | `/topics/:tid` | Xoá |
 
 ---
 
-## CRUD Người dùng
 
-Đối tượng: `NguoiDung`
-
-Các API:
-
-### Create
-
-```
-POST /nguoi-dung
-```
-
-Tạo người dùng mới.
-
----
-
-### Read All
-
-```
-GET /nguoi-dung
-```
-
-Lấy danh sách người dùng.
-
----
-
-### Read One
-
-```
-GET /nguoi-dung/:id
-```
-
-Lấy thông tin người dùng theo ID.
-
----
-
-### Update
-
-```
-PUT /nguoi-dung/:id
-```
-
-Cập nhật thông tin người dùng.
-
----
-
-### Delete
-
-```
-DELETE /nguoi-dung/:id
-```
-
-Xóa người dùng.
-
----
 
 # 7. API Testing
 
@@ -218,15 +255,25 @@ Body:
 
 ---
 
-# 8. Kiểm thử CRUD
+# 8. Kiểm thử
 
-Đã thực hiện thành công:
+Unit test tự động (Jest) cho toàn bộ tầng Service — 54 test case, 7 test suite:
 
-✅ Create người dùng  
-✅ Read danh sách người dùng  
-✅ Read người dùng theo ID  
-✅ Update người dùng  
-✅ Delete người dùng  
+```bash
+cd server && npm test
+```
+
+| Module | File test | Số test |
+|---|---|---|
+| DanhMuc | `danh-muc.service.spec.ts` | 8 |
+| GiaoDich | `giao-dich.service.spec.ts` | 9 |
+| NganSach | `ngan-sach.service.spec.ts` | 7 |
+| NguoiDung | `nguoi-dung.service.spec.ts` | 7 |
+| Auth | `auth.service.spec.ts` | 6 |
+| Student | `student.service.spec.ts` | 6 |
+| Topics | `topics.service.spec.ts` | 6 |
+
+Bao phủ các nhánh chính: tạo thành công, trùng lặp/xung đột dữ liệu, không tìm thấy (404), không đúng quyền sở hữu (403), cập nhật, xoá.
 
 ---
 

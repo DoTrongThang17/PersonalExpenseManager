@@ -11,11 +11,9 @@ import {
 import { NguoiDung } from '../nguoi-dung/nguoi-dung.entity';
 import { GiaoDich } from '../giao-dich/giao-dich.entity';
 import { NganSach } from '../ngan-sach/ngan-sach.entity';
+import { LoaiDanhMuc } from './loai-danh-muc.enum';
 
-export enum LoaiDanhMuc {
-  THU = 'thu',
-  CHI = 'chi',
-}
+export { LoaiDanhMuc };
 
 @Entity('DanhMuc')
 export class DanhMuc {

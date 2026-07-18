@@ -12,7 +12,10 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, password: string): Promise<Omit<NguoiDung, 'mat_khau'>> {
+  async validateUser(
+    email: string,
+    password: string,
+  ): Promise<Omit<NguoiDung, 'mat_khau'>> {
     const normalizedEmail = email?.trim().toLowerCase();
     const user = await this.nguoiDungService.findByEmail(normalizedEmail);
     if (!user) {
@@ -24,6 +27,7 @@ export class AuthService {
       throw new UnauthorizedException('Email hoặc mật khẩu không chính xác');
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- chỉ dùng để loại field khỏi response
     const { mat_khau, ...result } = user;
     return result;
   }

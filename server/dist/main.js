@@ -3,7 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+require("dotenv/config");
 const core_1 = require("@nestjs/core");
+const common_1 = require("@nestjs/common");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const express_session_1 = __importDefault(require("express-session"));
 const app_module_1 = require("./app.module");
@@ -15,9 +17,15 @@ async function bootstrap() {
         origin: true,
         credentials: true,
     });
+    app.useGlobalPipes(new common_1.ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+        transformOptions: { enableImplicitConversion: true },
+    }));
     app.use((0, cookie_parser_1.default)());
     app.use((0, express_session_1.default)({
-        secret: 'my-secret-key',
+        secret: process.env.SESSION_SECRET ?? 'dev-session-secret',
         resave: false,
         saveUninitialized: false,
         cookie: {

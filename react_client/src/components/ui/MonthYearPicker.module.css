@@ -1,0 +1,55 @@
+.wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+}
+
+.arrow {
+  border: none;
+  background: transparent;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.arrow:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.select {
+  border: none;
+  background: transparent;
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 4px 2px;
+  cursor: pointer;
+  color: var(--ink);
+}
+.select:focus-visible {
+  outline: 2px solid var(--gold);
+  border-radius: 3px;
+}
+
+.year {
+  width: 58px;
+  border: none;
+  background: transparent;
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+.year:focus-visible {
+  outline: 2px solid var(--gold);
+  border-radius: 3px;
+}

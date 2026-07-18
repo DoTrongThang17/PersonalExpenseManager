@@ -1,302 +1,136 @@
-import { Injectable, Inject, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  BadRequestException,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
 import { NguoiDung } from './nguoi-dung.entity';
-import { CreateNguoiDungDto } from './nguoi-dung.dto';
+import { CreateNguoiDungDto, UpdateNguoiDungDto } from './nguoi-dung.dto';
 
 @Injectable()
 export class NguoiDungService {
-
   constructor(
     @Inject('NGUOI_DUNG_REPOSITORY')
     private readonly nguoiDungRepository: Repository<NguoiDung>,
   ) {}
 
+  private stripPassword(user: NguoiDung): Omit<NguoiDung, 'mat_khau'> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- chỉ dùng để loại field khỏi response
+    const { mat_khau, ...rest } = user;
+    return rest;
+  }
 
-  // CREATE - Đăng ký người dùng
+  /** Chỉ chủ tài khoản mới được xem/sửa/xoá hồ sơ của chính mình. */
+  private assertOwnership(id: number, requestingUserId: number) {
+    if (id !== requestingUserId) {
+      throw new ForbiddenException(
+        'Bạn không có quyền thao tác trên tài khoản này',
+      );
+    }
+  }
+
+  // CREATE - Đăng ký người dùng (public, không cần đăng nhập)
   async create(createDto: CreateNguoiDungDto) {
+    const email = createDto.email.trim().toLowerCase();
+    const password = createDto.mat_khau.trim();
 
-    const email = createDto.email?.trim().toLowerCase();
-    const password = createDto.mat_khau?.trim();
-
-
-    if (!email || !password) {
-      throw new BadRequestException(
-        'Email và mật khẩu là bắt buộc'
-      );
+    const existedUser = await this.nguoiDungRepository.findOne({
+      where: { email },
+    });
+    if (existedUser) {
+      throw new BadRequestException('Email đã tồn tại');
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    const existedUser =
-      await this.nguoiDungRepository.findOne({
-        where:{
-          email
-        }
-      });
-
-
-    if(existedUser){
-      throw new BadRequestException(
-        'Email đã tồn tại'
-      );
-    }
-
-
-
-    const hashedPassword =
-      await bcrypt.hash(password,10);
-
-
-
-    const user =
-      this.nguoiDungRepository.create({
-
-        ho_ten:
-          createDto.ho_ten?.trim(),
-
-        email,
-
-        mat_khau:
-          hashedPassword,
-
-        so_dien_thoai:
-          createDto.so_dien_thoai?.trim(),
-
-      });
-
-
-
-    const savedUser =
-      await this.nguoiDungRepository.save(user);
-
-
-
-    delete (savedUser as Partial<NguoiDung>)
-      .mat_khau;
-
-
-
-    return {
-
-      message:
-        'Đăng ký thành công',
-
-      data:
-        savedUser
-
-    };
-
-  }
-
-
-
-
-
-  // READ - lấy tất cả người dùng
-  async findAll(){
-
-    const users =
-      await this.nguoiDungRepository.find();
-
-
-    return users.map(user=>{
-
-      delete (user as Partial<NguoiDung>)
-        .mat_khau;
-
-      return user;
-
+    const user = this.nguoiDungRepository.create({
+      ho_ten: createDto.ho_ten.trim(),
+      email,
+      mat_khau: hashedPassword,
+      so_dien_thoai: createDto.so_dien_thoai.trim(),
     });
 
+    const savedUser = await this.nguoiDungRepository.save(user);
+
+    return {
+      message: 'Đăng ký thành công',
+      data: this.stripPassword(savedUser),
+    };
   }
 
+  // READ - lấy tất cả người dùng (yêu cầu đăng nhập - xem ghi chú ở controller)
+  async findAll() {
+    const users = await this.nguoiDungRepository.find();
+    return users.map((user) => this.stripPassword(user));
+  }
 
+  // READ - lấy theo id, chỉ chủ tài khoản mới xem được
+  async findOne(id: number, requestingUserId: number) {
+    this.assertOwnership(id, requestingUserId);
 
+    const user = await this.nguoiDungRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('Không tìm thấy người dùng');
+    }
+    return this.stripPassword(user);
+  }
 
+  // Dùng nội bộ cho AuthService khi login - KHÔNG strip mật khẩu vì cần so sánh
+  async findByEmail(email: string): Promise<NguoiDung | null> {
+    return this.nguoiDungRepository.findOne({ where: { email } });
+  }
 
-  // READ - lấy theo id
-  async findOne(id:number){
+  // UPDATE - chỉ chủ tài khoản mới sửa được
+  async update(id: number, requestingUserId: number, dto: UpdateNguoiDungDto) {
+    this.assertOwnership(id, requestingUserId);
 
-    const user =
-      await this.nguoiDungRepository.findOne({
-
-        where:{
-          id
-        }
-
-      });
-
-
-
-    if(!user){
-
-      throw new BadRequestException(
-        'Không tìm thấy người dùng'
-      );
-
+    const user = await this.nguoiDungRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('Không tìm thấy người dùng');
     }
 
-
-
-    delete (user as Partial<NguoiDung>)
-      .mat_khau;
-
-
-
-    return user;
-
-  }
-
-
-
-
-
-  // LOGIN JWT tìm email
-  async findByEmail(
-    email:string
-  ): Promise<NguoiDung | null>{
-
-
-    return this.nguoiDungRepository.findOne({
-
-      where:{
-        email
+    if (dto.email) {
+      const normalizedEmail = dto.email.trim().toLowerCase();
+      if (normalizedEmail !== user.email) {
+        const emailTaken = await this.nguoiDungRepository.findOne({
+          where: { email: normalizedEmail },
+        });
+        if (emailTaken) {
+          throw new BadRequestException(
+            'Email đã được sử dụng bởi tài khoản khác',
+          );
+        }
       }
-
-    });
-
-  }
-
-
-
-
-
-  // UPDATE
-  async update(
-    id:number,
-    data:Partial<NguoiDung>
-  ){
-
-
-    const user =
-      await this.nguoiDungRepository.findOne({
-
-        where:{
-          id
-        }
-
-      });
-
-
-
-    if(!user){
-
-      throw new BadRequestException(
-        'Không tìm thấy người dùng'
-      );
-
+      user.email = normalizedEmail;
     }
 
+    if (dto.ho_ten) user.ho_ten = dto.ho_ten.trim();
+    if (dto.so_dien_thoai) user.so_dien_thoai = dto.so_dien_thoai.trim();
+    if (dto.mat_khau) user.mat_khau = await bcrypt.hash(dto.mat_khau, 10);
 
-
-    if(data.email){
-
-      data.email =
-        data.email.trim()
-        .toLowerCase();
-
-    }
-
-
-
-    if(data.mat_khau){
-
-      data.mat_khau =
-        await bcrypt.hash(
-          data.mat_khau,
-          10
-        );
-
-    }
-
-
-
-    await this.nguoiDungRepository.update(
-      id,
-      data
-    );
-
-
-
-    const updatedUser =
-      await this.nguoiDungRepository.findOne({
-
-        where:{
-          id
-        }
-
-      });
-
-
-
-    delete (updatedUser as Partial<NguoiDung>)
-      .mat_khau;
-
-
+    const updatedUser = await this.nguoiDungRepository.save(user);
 
     return {
-
-      message:
-        'Cập nhật thành công',
-
-      data:
-        updatedUser
-
+      message: 'Cập nhật thành công',
+      data: this.stripPassword(updatedUser),
     };
-
   }
 
+  // DELETE - chỉ chủ tài khoản mới xoá được chính mình
+  async remove(id: number, requestingUserId: number) {
+    this.assertOwnership(id, requestingUserId);
 
-
-
-
-  // DELETE
-  async remove(id:number){
-
-
-    const user =
-      await this.nguoiDungRepository.findOne({
-
-        where:{
-          id
-        }
-
-      });
-
-
-
-    if(!user){
-
-      throw new BadRequestException(
-        'Không tìm thấy người dùng'
-      );
-
+    const user = await this.nguoiDungRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('Không tìm thấy người dùng');
     }
 
+    await this.nguoiDungRepository.remove(user);
 
-
-    await this.nguoiDungRepository.delete(id);
-
-
-
-    return {
-
-      message:
-        'Xóa người dùng thành công'
-
-    };
-
+    return { message: 'Xóa người dùng thành công' };
   }
-
 }

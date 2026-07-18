@@ -20,17 +20,35 @@ let TopicsService = class TopicsService {
     constructor(topicsRepository) {
         this.topicsRepository = topicsRepository;
     }
-    async findAll() {
-        const tid = await this.topicsRepository.findBy({
-            TId: 101,
+    async create(dto) {
+        const existed = await this.topicsRepository.findOne({
+            where: { TId: dto.TId },
         });
-        return tid;
+        if (existed) {
+            throw new common_1.ConflictException(`Mã chủ đề "${dto.TId}" đã tồn tại`);
+        }
+        const topic = this.topicsRepository.create(dto);
+        return this.topicsRepository.save(topic);
     }
-    async getTopics() {
+    async findAll() {
         return this.topicsRepository.find();
     }
-    getStudent() {
-        return 'Ke mac doi Hello World!';
+    async findOne(tid) {
+        const topic = await this.topicsRepository.findOne({ where: { TId: tid } });
+        if (!topic) {
+            throw new common_1.NotFoundException(`Không tìm thấy chủ đề có mã "${tid}"`);
+        }
+        return topic;
+    }
+    async update(tid, dto) {
+        const topic = await this.findOne(tid);
+        Object.assign(topic, dto);
+        return this.topicsRepository.save(topic);
+    }
+    async remove(tid) {
+        const topic = await this.findOne(tid);
+        await this.topicsRepository.remove(topic);
+        return { message: `Đã xoá chủ đề có mã "${tid}"` };
     }
 };
 exports.TopicsService = TopicsService;

@@ -1,0 +1,40 @@
+@startuml 05_sequence_sua_xoa_danh_muc
+!include style.iuml
+title Sơ đồ tuần tự — Sửa / Xoá danh mục
+
+actor "Người dùng" as User
+participant "JwtAuthGuard" as Guard
+participant "DanhMucController" as Ctrl
+participant "DanhMucService" as Svc
+database "MySQL" as DB
+
+User -> Guard: PUT /danh-muc/:id\n(Authorization: Bearer <token>)
+Guard -> Guard: Giải mã token,\nlấy userId
+
+alt token không hợp lệ / hết hạn
+  Guard --> User: 401 Unauthorized
+else token hợp lệ
+  Guard -> Ctrl: forward request + user
+  Ctrl -> Svc: update(id, userId, dto)
+  Svc -> DB: SELECT * FROM DanhMuc\nWHERE id = ?
+
+  alt không tìm thấy danh mục
+    DB --> Svc: null
+    Svc --> Ctrl: throw NotFoundException
+    Ctrl --> User: 404 "Không tìm thấy danh mục"
+  else tìm thấy
+    DB --> Svc: DanhMuc
+    Svc -> Svc: Kiểm tra tên mới\ncó trùng danh mục khác không
+    alt trùng tên
+      Svc --> Ctrl: throw BadRequestException
+      Ctrl --> User: 400 "Tên danh mục đã tồn tại"
+    else không trùng
+      Svc -> DB: UPDATE DanhMuc SET ...
+      DB --> Svc: OK
+      Svc --> Ctrl: DanhMuc đã cập nhật
+      Ctrl --> User: 200 {DanhMuc}
+    end
+  end
+end
+
+@enduml

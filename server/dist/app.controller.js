@@ -23,9 +23,6 @@ let AppController = class AppController {
     getHello() {
         return this.appService.getHello();
     }
-    getTopics() {
-        return 'this is testing';
-    }
     setCookie(res) {
         res.cookie('username', 'thang', {
             httpOnly: true,
@@ -50,12 +47,6 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", String)
 ], AppController.prototype, "getHello", null);
-__decorate([
-    (0, common_1.Get)('topics'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", String)
-], AppController.prototype, "getTopics", null);
 __decorate([
     (0, common_1.Get)('cookie'),
     __param(0, (0, common_1.Res)()),

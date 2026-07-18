@@ -42,6 +42,8 @@ const nguoi_dung_entity_1 = require("../nguoi-dung/nguoi-dung.entity");
 const danh_muc_entity_1 = require("../danh-muc/danh-muc.entity");
 const giao_dich_entity_1 = require("../giao-dich/giao-dich.entity");
 const ngan_sach_entity_1 = require("../ngan-sach/ngan-sach.entity");
+const topics_entity_1 = require("../topics/topics.entity");
+const student_entity_1 = require("../student/student.entity");
 dotenv.config();
 const dbHost = process.env.DB_HOST || 'localhost';
 const dbPort = Number(process.env.DB_PORT || '3306');
@@ -64,7 +66,7 @@ exports.databaseProviders = [
                 username: dbUser,
                 password: dbPassword,
                 database: dbName,
-                entities: [nguoi_dung_entity_1.NguoiDung, danh_muc_entity_1.DanhMuc, giao_dich_entity_1.GiaoDich, ngan_sach_entity_1.NganSach],
+                entities: [nguoi_dung_entity_1.NguoiDung, danh_muc_entity_1.DanhMuc, giao_dich_entity_1.GiaoDich, ngan_sach_entity_1.NganSach, topics_entity_1.TOPICS, student_entity_1.STUDENT],
                 synchronize: true,
                 ssl: sslConfig,
                 logging: true,

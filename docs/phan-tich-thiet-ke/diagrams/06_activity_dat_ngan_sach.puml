@@ -1,0 +1,37 @@
+@startuml 06_activity_dat_ngan_sach
+!include style.iuml
+title Sơ đồ hoạt động — Đặt ngân sách theo tháng
+
+start
+:Người dùng chọn danh mục,\nnhập hạn mức, chọn tháng/năm;
+:Frontend gửi POST /ngan-sach\n(kèm JWT token);
+
+:JwtAuthGuard xác thực,\nValidationPipe kiểm tra dữ liệu;
+if (Hợp lệ?) then (không)
+  :Trả lỗi 401 / 400;
+  stop
+else (có)
+endif
+
+:Truy vấn ngân sách hiện có\ncùng người dùng + danh mục + tháng + năm;
+
+if (Đã tồn tại ngân sách\ncho danh mục này trong tháng/năm này?) then (có)
+  :Trả lỗi 409 Conflict\n"Đã tồn tại ngân sách cho\ndanh mục này trong tháng X/Y";
+  stop
+else (chưa)
+endif
+
+:Lưu ngân sách mới vào DB;
+:Trả về ngân sách vừa tạo;
+
+note right
+  Ở màn hình Tổng quan / Ngân sách,
+  frontend sẽ tự tính "đã chi" bằng cách
+  cộng dồn Giao dịch cùng danh mục + tháng,
+  rồi so với hạn mức để hiển thị
+  thanh tiến độ và cảnh báo vượt mức.
+end note
+
+stop
+
+@enduml
