@@ -248,50 +248,27 @@ npm test
 
 # 📸 Screenshots
 
-## Login
+## 🔐 Login
 
-> *(Thêm ảnh login tại đây)*
-
-```
-<img width="1535" height="773" alt="image" src="https://github.com/user-attachments/assets/fb913ace-2dbd-4a27-86bf-8f952b323c52" />
-
-```
+<img width="900" alt="Login" src="https://github.com/user-attachments/assets/fb913ace-2dbd-4a27-86bf-8f952b323c52" />
 
 ---
 
-## Dashboard
+## 📊 Dashboard
 
-> *(Thêm ảnh dashboard)*
-
-```
-<img width="1536" height="777" alt="image" src="https://github.com/user-attachments/assets/6bf30497-68e1-4bbb-b478-305678368a14" />
-
-```
+<img width="900" alt="Dashboard" src="https://github.com/user-attachments/assets/6bf30497-68e1-4bbb-b478-305678368a14" />
 
 ---
 
-## Transaction
+## 💳 Transaction
 
-> *(Thêm ảnh giao dịch)*
-
-```
-<img width="1536" height="776" alt="image" src="https://github.com/user-attachments/assets/246edd6b-2156-4998-b656-0dcd100ca139" />
-
-```
+<img width="900" alt="Transaction" src="https://github.com/user-attachments/assets/246edd6b-2156-4998-b656-0dcd100ca139" />
 
 ---
 
-## Statistics
+## 📈 Statistics
 
-> *(Thêm ảnh thống kê)*
-
-```
-<img width="1536" height="777" alt="image" src="https://github.com/user-attachments/assets/e1b621c8-3c43-452a-b0cb-83f837067057" />
-
-```
-
----
-
+<img width="900" alt="Statistics" src="https://github.com/user-attachments/assets/e1b621c8-3c43-452a-b0cb-83f837067057" />
 # 🎥 Demo
 
 Video Demo
