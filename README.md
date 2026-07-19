@@ -253,7 +253,8 @@ npm test
 > *(Thêm ảnh login tại đây)*
 
 ```
-docs/images/login.png
+<img width="1535" height="773" alt="image" src="https://github.com/user-attachments/assets/fb913ace-2dbd-4a27-86bf-8f952b323c52" />
+
 ```
 
 ---
@@ -263,7 +264,8 @@ docs/images/login.png
 > *(Thêm ảnh dashboard)*
 
 ```
-docs/images/dashboard.png
+<img width="1536" height="777" alt="image" src="https://github.com/user-attachments/assets/6bf30497-68e1-4bbb-b478-305678368a14" />
+
 ```
 
 ---
@@ -273,7 +275,8 @@ docs/images/dashboard.png
 > *(Thêm ảnh giao dịch)*
 
 ```
-docs/images/transaction.png
+<img width="1536" height="776" alt="image" src="https://github.com/user-attachments/assets/246edd6b-2156-4998-b656-0dcd100ca139" />
+
 ```
 
 ---
@@ -283,7 +286,8 @@ docs/images/transaction.png
 > *(Thêm ảnh thống kê)*
 
 ```
-docs/images/statistics.png
+<img width="1536" height="777" alt="image" src="https://github.com/user-attachments/assets/e1b621c8-3c43-452a-b0cb-83f837067057" />
+
 ```
 
 ---
