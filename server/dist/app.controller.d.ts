@@ -8,7 +8,7 @@ declare module 'express-session' {
 export declare class AppController {
     private readonly appService;
     constructor(appService: AppService);
-    getHello(): string;
+    home(res: Response): void;
     setCookie(res: Response): void;
     setSession(req: Request, res: Response): void;
     getSession(req: Request): {

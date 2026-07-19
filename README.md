@@ -11,13 +11,13 @@
 # 1. Backend (NestJS) - chạy ở cổng 5000
 cd server
 npm install
-cp .env.example .env      # chỉnh thông tin DB thật (host/user/password/database)
+cp .env.example .env
 npm run start:dev
 
 # 2. Frontend (React) - chạy ở cổng 3000, mở terminal khác
 cd react_client
 npm install
-cp .env.example .env      # mặc định trỏ tới http://localhost:5000
+cp .env.example .env
 npm start
 ```
 
