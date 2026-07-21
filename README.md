@@ -1,5 +1,5 @@
-<div align="center">
-
+<div align="center"> 
+  
 # 💰 Personal Expense Manager
 
 ### Personal Finance Management System
