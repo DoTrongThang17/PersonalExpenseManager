@@ -12,6 +12,7 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const database_module_1 = require("./database/database.module");
 const nguoi_dung_module_1 = require("./nguoi-dung/nguoi-dung.module");
+<<<<<<< HEAD
 const danh_muc_module_1 = require("./danh-muc/danh-muc.module");
 const giao_dich_module_1 = require("./giao-dich/giao-dich.module");
 const ngan_sach_module_1 = require("./ngan-sach/ngan-sach.module");
@@ -19,6 +20,8 @@ const student_module_1 = require("./student/student.module");
 const topics_module_1 = require("./topics/topics.module");
 const auth_module_1 = require("./auth/auth.module");
 const api_test_module_1 = require("./api-test/api-test.module");
+=======
+>>>>>>> 6cf3876b (Add danh-muc, ngan-sach and nguoi-dung modules)
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -37,6 +40,7 @@ exports.AppModule = AppModule = __decorate([
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
+        imports: [nguoi_dung_module_1.NguoiDungModule],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

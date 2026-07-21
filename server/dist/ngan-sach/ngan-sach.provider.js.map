@@ -1,0 +1,1 @@
+{"version":3,"file":"ngan-sach.provider.js","sourceRoot":"","sources":["../../src/ngan-sach/ngan-sach.provider.ts"],"names":[],"mappings":";;;AACA,yDAA8C;AAEjC,QAAA,iBAAiB,GAAG;IAC/B;QACE,OAAO,EAAE,sBAAsB;QAC/B,UAAU,EAAE,CAAC,UAAsB,EAAE,EAAE,CACrC,UAAU,CAAC,aAAa,CAAC,2BAAQ,CAAC;QACpC,MAAM,EAAE,CAAC,aAAa,CAAC;KACxB;CACF,CAAC"}
